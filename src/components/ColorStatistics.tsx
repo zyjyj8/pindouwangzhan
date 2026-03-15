@@ -15,13 +15,25 @@ interface ColorStatisticsProps {
 export function ColorStatistics({ colorCounts }: ColorStatisticsProps) {
   const [copied, setCopied] = useState(false);
 
+  const customSort = (a: string, b: string): number => {
+    const letterA = a.match(/[A-Z]/)?.[0] || '';
+    const letterB = b.match(/[A-Z]/)?.[0] || '';
+    const numA = parseInt(a.match(/\d+/)?.[0] || '0');
+    const numB = parseInt(b.match(/\d+/)?.[0] || '0');
+
+    if (letterA !== letterB) {
+      return letterA.localeCompare(letterB);
+    }
+    return numA - numB;
+  };
+
   const sortedColors = Array.from(colorCounts.values()).sort((a, b) =>
-    a.code.localeCompare(b.code)
+    customSort(a.code, b.code)
   );
 
   const handleCopy = () => {
     const text = sortedColors
-      .map((color) => `${color.code} (${color.name}): ${color.count}个`)
+      .map((color) => `${color.code} ${color.name}: ${color.count}个`)
       .join('\n');
 
     navigator.clipboard.writeText(text).then(() => {
