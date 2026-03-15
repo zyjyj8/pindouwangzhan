@@ -1,24 +1,21 @@
-import { Download, Eye, ZoomIn, ZoomOut } from 'lucide-react';
+import { X, ZoomIn, ZoomOut } from 'lucide-react';
 import { useRef, useEffect, useState } from 'react';
 import { MardColor } from '../data/mardColors';
-import { PreviewModal } from './PreviewModal';
 
-interface PixelGridProps {
+interface PreviewModalProps {
   pixels: MardColor[][];
+  onClose: () => void;
 }
 
-export function PixelGrid({ pixels }: PixelGridProps) {
+export function PreviewModal({ pixels, onClose }: PreviewModalProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [showPreview, setShowPreview] = useState(false);
 
   const cellSize = 40;
-  const rows = pixels.length;
-  const cols = pixels[0]?.length || 0;
 
   useEffect(() => {
     if (!canvasRef.current || pixels.length === 0) return;
@@ -27,10 +24,11 @@ export function PixelGrid({ pixels }: PixelGridProps) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const rows = pixels.length;
+    const cols = pixels[0].length;
+
     canvas.width = cols * cellSize;
     canvas.height = rows * cellSize;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
@@ -54,7 +52,7 @@ export function PixelGrid({ pixels }: PixelGridProps) {
         ctx.fillText(color.code, px + cellSize / 2, py + cellSize / 2);
       }
     }
-  }, [pixels, rows, cols]);
+  }, [pixels]);
 
   const handleWheel = (e: WheelEvent) => {
     e.preventDefault();
@@ -88,61 +86,36 @@ export function PixelGrid({ pixels }: PixelGridProps) {
     return () => container.removeEventListener('wheel', handleWheel);
   }, [zoom]);
 
-  const handleDownload = () => {
-    if (!canvasRef.current) return;
-
-    const link = document.createElement('a');
-    link.download = `pixel-art-${cols}x${rows}.png`;
-    link.href = canvasRef.current.toDataURL();
-    link.click();
-  };
-
-  if (pixels.length === 0) {
-    return null;
-  }
-
   return (
-    <>
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-800">
-            像素化图 ({cols}×{rows})
-          </h2>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setShowPreview(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm shadow-md"
-            >
-              <Eye size={16} />
-              查看全图预览
-            </button>
-            <button
-              onClick={handleDownload}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm shadow-md"
-            >
-              <Download size={16} />
-              下载图片
-            </button>
-          </div>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-800">全图预览</h2>
+          <button
+            onClick={onClose}
+            className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <X size={24} className="text-gray-600" />
+          </button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-4">
-          <div className="flex gap-2 mb-3 pb-3 border-b border-gray-200">
+        <div className="flex-1 overflow-hidden flex flex-col">
+          <div className="flex gap-2 p-4 bg-gray-50 border-b">
             <button
-              onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}
-              className="flex items-center gap-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors text-sm"
+              onClick={() => setZoom(Math.max(0.5, zoom - 0.2))}
+              className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
             >
-              <ZoomOut size={16} />
+              <ZoomOut size={18} />
               缩小
             </button>
-            <div className="flex items-center gap-2 px-3 py-1 bg-gray-100 rounded text-sm">
-              <span className="font-medium">{(zoom * 100).toFixed(0)}%</span>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded">
+              <span className="text-sm font-medium">{(zoom * 100).toFixed(0)}%</span>
             </div>
             <button
-              onClick={() => setZoom(Math.min(zoom + 0.1, 5))}
-              className="flex items-center gap-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors text-sm"
+              onClick={() => setZoom(Math.min(zoom + 0.2, 5))}
+              className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
             >
-              <ZoomIn size={16} />
+              <ZoomIn size={18} />
               放大
             </button>
             <button
@@ -150,20 +123,15 @@ export function PixelGrid({ pixels }: PixelGridProps) {
                 setZoom(1);
                 setPan({ x: 0, y: 0 });
               }}
-              className="flex items-center gap-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors text-sm ml-auto"
+              className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors ml-auto"
             >
-              重置
+              重置视图
             </button>
           </div>
 
           <div
             ref={containerRef}
-            className="border border-gray-300 rounded overflow-auto bg-gray-50 cursor-grab active:cursor-grabbing"
-            style={{
-              maxWidth: '600px',
-              maxHeight: '700px',
-              width: '100%',
-            }}
+            className="flex-1 overflow-auto bg-gray-100 cursor-grab active:cursor-grabbing"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -177,15 +145,11 @@ export function PixelGrid({ pixels }: PixelGridProps) {
               }}
               className="inline-block"
             >
-              <canvas ref={canvasRef} className="block" />
+              <canvas ref={canvasRef} className="border border-gray-300" />
             </div>
           </div>
         </div>
       </div>
-
-      {showPreview && (
-        <PreviewModal pixels={pixels} onClose={() => setShowPreview(false)} />
-      )}
-    </>
+    </div>
   );
 }
