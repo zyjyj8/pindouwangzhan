@@ -1,5 +1,6 @@
 import { Copy } from 'lucide-react';
 import { useState } from 'react';
+import { MARD_COLOR_ORDER } from '../data/mardColors';
 
 interface ColorCount {
   code: string;
@@ -12,28 +13,21 @@ interface ColorStatisticsProps {
   colorCounts: Map<string, ColorCount>;
 }
 
+/** 按官方色卡顺序排序：A1→A10→…→A26, B1→…, C1→… */
+function sortByOfficialOrder(a: ColorCount, b: ColorCount): number {
+  const orderA = MARD_COLOR_ORDER.get(a.code) ?? 9999;
+  const orderB = MARD_COLOR_ORDER.get(b.code) ?? 9999;
+  return orderA - orderB;
+}
+
 export function ColorStatistics({ colorCounts }: ColorStatisticsProps) {
   const [copied, setCopied] = useState(false);
 
-  const customSort = (a: string, b: string): number => {
-    const letterA = a.match(/[A-Z]/)?.[0] || '';
-    const letterB = b.match(/[A-Z]/)?.[0] || '';
-    const numA = parseInt(a.match(/\d+/)?.[0] || '0');
-    const numB = parseInt(b.match(/\d+/)?.[0] || '0');
-
-    if (letterA !== letterB) {
-      return letterA.localeCompare(letterB);
-    }
-    return numA - numB;
-  };
-
-  const sortedColors = Array.from(colorCounts.values()).sort((a, b) =>
-    customSort(a.code, b.code)
-  );
+  const sortedColors = Array.from(colorCounts.values()).sort(sortByOfficialOrder);
 
   const handleCopy = () => {
     const text = sortedColors
-      .map((color) => `${color.code} ${color.name}: ${color.count}个`)
+      .map((color) => `${color.code} ${color.name}：${color.count}个`)
       .join('\n');
 
     navigator.clipboard.writeText(text).then(() => {

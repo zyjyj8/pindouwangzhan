@@ -1,5 +1,6 @@
 import { MardColor, MARD_COLORS } from '../data/mardColors';
 
+/** RGB 欧氏距离：√[(R1-R2)² + (G1-G2)² + (B1-B2)²] */
 export function getColorDistance(
   rgb1: [number, number, number],
   rgb2: [number, number, number]
@@ -11,7 +12,14 @@ export function getColorDistance(
   );
 }
 
+/**
+ * 仅从官方标准色卡中按 RGB 欧氏距离取最近色号，返回 code/name/rgb/hex。
+ * 兜底：任意输入 RGB 均匹配到色卡中距离最近的一项，绝不输出非标准色号。
+ */
 export function findClosestMardColor(rgb: [number, number, number]): MardColor {
+  if (MARD_COLORS.length === 0) {
+    throw new Error('色卡未加载，请刷新页面');
+  }
   let closestColor = MARD_COLORS[0];
   let minDistance = getColorDistance(rgb, closestColor.rgb);
 
@@ -24,6 +32,21 @@ export function findClosestMardColor(rgb: [number, number, number]): MardColor {
   }
 
   return closestColor;
+}
+
+/** 页面加载时校验官方色卡是否正常加载，避免色号缺失 */
+export function validatePalette(): boolean {
+  if (!MARD_COLORS?.length) return false;
+  const expectedMin = 200;
+  if (MARD_COLORS.length < expectedMin) return false;
+  const first = MARD_COLORS[0];
+  return Boolean(
+    first &&
+      typeof first.code === 'string' &&
+      typeof first.name === 'string' &&
+      Array.isArray(first.rgb) &&
+      first.rgb.length === 3
+  );
 }
 
 export function getAverageColor(
