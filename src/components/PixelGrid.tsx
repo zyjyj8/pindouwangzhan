@@ -1,13 +1,25 @@
-import { Download, Eye, ZoomIn, ZoomOut } from 'lucide-react';
+import { Download, Eye, ZoomIn, ZoomOut, FlipHorizontal, FlipVertical } from 'lucide-react';
 import { useRef, useEffect, useState } from 'react';
 import { MardColor } from '../data/mardColors';
 import { PreviewModal } from './PreviewModal';
 
 interface PixelGridProps {
   pixels: MardColor[][];
+  isFlippedHorizontally?: boolean;
+  isFlippedVertically?: boolean;
+  onHorizontalFlip?: () => void;
+  onVerticalFlip?: () => void;
+  onReset?: () => void;
 }
 
-export function PixelGrid({ pixels }: PixelGridProps) {
+export function PixelGrid({ 
+  pixels, 
+  isFlippedHorizontally = false,
+  isFlippedVertically = false,
+  onHorizontalFlip,
+  onVerticalFlip,
+  onReset
+}: PixelGridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
@@ -27,10 +39,77 @@ export function PixelGrid({ pixels }: PixelGridProps) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = cols * cellSize;
-    canvas.height = rows * cellSize;
+    canvas.width = cols * cellSize + 60; // Add space for left and right row numbers
+    canvas.height = rows * cellSize + 60; // Add space for top and bottom column numbers
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw light blue background for axis areas
+    ctx.fillStyle = '#e6f3ff';
+    
+    // Top axis area
+    ctx.fillRect(30, 0, cols * cellSize, 30);
+    
+    // Bottom axis area  
+    ctx.fillRect(30, rows * cellSize + 30, cols * cellSize, 30);
+    
+    // Left axis area
+    ctx.fillRect(0, 30, 30, rows * cellSize);
+    
+    // Right axis area
+    ctx.fillRect(cols * cellSize + 30, 30, 30, rows * cellSize);
+
+    // Draw axis numbers (outside flip transformations)
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    // Top axis numbers (columns) - from left to right: 1, 2, 3...
+    for (let x = 0; x < cols; x++) {
+      const px = x * cellSize + cellSize / 2 + 30;
+      const text = (x + 1).toString();
+      ctx.fillText(text, px, 15);
+    }
+
+    // Bottom axis numbers (columns) - same as top
+    for (let x = 0; x < cols; x++) {
+      const px = x * cellSize + cellSize / 2 + 30;
+      const text = (x + 1).toString();
+      ctx.fillText(text, px, rows * cellSize + 45);
+    }
+
+    // Left axis numbers (rows) - from top to bottom: 1, 2, 3...
+    ctx.textAlign = 'right';
+    for (let y = 0; y < rows; y++) {
+      const py = y * cellSize + cellSize / 2 + 30;
+      const text = (y + 1).toString();
+      ctx.fillText(text, 15, py);
+    }
+
+    // Right axis numbers (rows) - same as left
+    ctx.textAlign = 'left';
+    for (let y = 0; y < rows; y++) {
+      const py = y * cellSize + cellSize / 2 + 30;
+      const text = (y + 1).toString();
+      ctx.fillText(text, cols * cellSize + 45, py);
+    }
+
+    // Apply flip transformations
+    ctx.save();
+    
+    // Translate to account for axis space
+    ctx.translate(30, 30);
+    
+    if (isFlippedHorizontally) {
+      ctx.scale(-1, 1);
+      ctx.translate(-canvas.width + 60, 0);
+    }
+    
+    if (isFlippedVertically) {
+      ctx.scale(1, -1);
+      ctx.translate(0, -canvas.height + 60);
+    }
 
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
@@ -54,7 +133,9 @@ export function PixelGrid({ pixels }: PixelGridProps) {
         ctx.fillText(color.code, px + cellSize / 2, py + cellSize / 2);
       }
     }
-  }, [pixels, rows, cols]);
+
+    ctx.restore();
+  }, [pixels, rows, cols, isFlippedHorizontally, isFlippedVertically]);
 
   const handleWheel = (e: WheelEvent) => {
     e.preventDefault();
@@ -105,64 +186,126 @@ export function PixelGrid({ pixels }: PixelGridProps) {
     <>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-800">
+          <h2 className="text-lg font-semibold" style={{color: '#d63384'}}>
             像素化图 ({cols}×{rows})
           </h2>
           <div className="flex gap-2">
             <button
               onClick={() => setShowPreview(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm shadow-md"
+              className="flex items-center gap-2 px-4 py-2 text-white rounded-2xl transition-all duration-200 text-sm shadow-lg hover:shadow-xl hover:scale-105"
+              style={{
+                background: 'linear-gradient(135deg, #ffd6e7 0%, #e8d5f2 100%)',
+                boxShadow: '0 4px 12px rgba(232, 213, 242, 0.4)'
+              }}
             >
-              <Eye size={16} />
-              查看全图预览
+              <Eye size={16} style={{color: '#000000'}} />
+              <span style={{color: '#000000'}}>查看全图预览</span>
             </button>
             <button
               onClick={handleDownload}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm shadow-md"
+              className="flex items-center gap-2 px-4 py-2 text-white rounded-2xl transition-all duration-200 text-sm shadow-lg hover:shadow-xl hover:scale-105"
+              style={{
+                background: 'linear-gradient(135deg, #87ceeb 0%, #98fb98 100%)',
+                boxShadow: '0 4px 12px rgba(135, 206, 235, 0.4)'
+              }}
             >
-              <Download size={16} />
-              下载图片
+              <Download size={16} style={{color: '#000000'}} />
+              <span style={{color: '#000000'}}>下载图片</span>
             </button>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-4">
-          <div className="flex gap-2 mb-3 pb-3 border-b border-gray-200">
+        <div className="rounded-2xl shadow-lg p-4" style={{backgroundColor: '#fff9f9', boxShadow: '0 4px 15px rgba(255, 214, 231, 0.3)'}}>
+          <div className="flex gap-2 mb-3 pb-3 border-b-2" style={{borderColor: '#ffd6e7'}}>
             <button
               onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}
-              className="flex items-center gap-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors text-sm"
+              className="flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105"
+              style={{
+                background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
+                color: '#5a4a4a'
+              }}
             >
-              <ZoomOut size={16} />
-              缩小
+              <ZoomOut size={16} style={{color: '#000000'}} />
+              <span style={{color: '#000000'}}>缩小</span>
             </button>
-            <div className="flex items-center gap-2 px-3 py-1 bg-gray-100 rounded text-sm">
-              <span className="font-medium">{(zoom * 100).toFixed(0)}%</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-2xl shadow" style={{backgroundColor: '#fff9f9', color: '#5a4a4a'}}>
+              <span className="font-medium" style={{color: '#000000'}}>{(zoom * 100).toFixed(0)}%</span>
             </div>
             <button
               onClick={() => setZoom(Math.min(zoom + 0.1, 5))}
-              className="flex items-center gap-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors text-sm"
+              className="flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105"
+              style={{
+                background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
+                color: '#5a4a4a'
+              }}
             >
-              <ZoomIn size={16} />
-              放大
+              <ZoomIn size={16} style={{color: '#000000'}} />
+              <span style={{color: '#000000'}}>放大</span>
             </button>
+            
+            {/* Flip buttons */}
+            <button
+              onClick={onHorizontalFlip}
+              className={`flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105 ${
+                isFlippedHorizontally 
+                  ? 'text-white' 
+                  : ''
+              }`}
+              style={{
+                background: isFlippedHorizontally 
+                  ? 'linear-gradient(135deg, #d63384 0%, #e8d5f2 100%)'
+                  : 'linear-gradient(135deg, #ffd6e7 0%, #ffe0e6 100%)',
+                boxShadow: '0 2px 8px rgba(214, 51, 132, 0.3)'
+              }}
+            >
+              <FlipHorizontal size={16} style={{color: '#000000'}} />
+              <span style={{color: '#000000'}}>水平翻转</span>
+            </button>
+            <button
+              onClick={onVerticalFlip}
+              className={`flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105 ${
+                isFlippedVertically 
+                  ? 'text-white' 
+                  : ''
+              }`}
+              style={{
+                background: isFlippedVertically 
+                  ? 'linear-gradient(135deg, #d63384 0%, #e8d5f2 100%)'
+                  : 'linear-gradient(135deg, #ffd6e7 0%, #ffe0e6 100%)',
+                boxShadow: '0 2px 8px rgba(214, 51, 132, 0.3)'
+              }}
+            >
+              <FlipVertical size={16} style={{color: '#000000'}} />
+              <span style={{color: '#000000'}}>垂直翻转</span>
+            </button>
+            
             <button
               onClick={() => {
                 setZoom(1);
                 setPan({ x: 0, y: 0 });
+                onReset?.();
               }}
-              className="flex items-center gap-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors text-sm ml-auto"
+              className="flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105 ml-auto"
+              style={{
+                background: 'linear-gradient(135deg, #a8e6cf 0%, #ffd3b6 100%)',
+                color: '#5a4a4a',
+                boxShadow: '0 2px 8px rgba(168, 230, 207, 0.3)'
+              }}
             >
-              重置
+              <span style={{color: '#000000'}}>重置</span>
             </button>
           </div>
 
           <div
             ref={containerRef}
-            className="border border-gray-300 rounded overflow-auto bg-gray-50 cursor-grab active:cursor-grabbing"
+            className="rounded-2xl overflow-auto border-2"
             style={{
-              maxWidth: '600px',
-              maxHeight: '700px',
+              maxWidth: '700px',
+              maxHeight: '800px',
               width: '100%',
+              padding: '10px',
+              backgroundColor: '#fff9f9',
+              borderColor: '#e6f3ff'
             }}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
@@ -184,7 +327,12 @@ export function PixelGrid({ pixels }: PixelGridProps) {
       </div>
 
       {showPreview && (
-        <PreviewModal pixels={pixels} onClose={() => setShowPreview(false)} />
+        <PreviewModal 
+          pixels={pixels} 
+          onClose={() => setShowPreview(false)}
+          isFlippedHorizontally={isFlippedHorizontally}
+          isFlippedVertically={isFlippedVertically}
+        />
       )}
     </>
   );

@@ -41,45 +41,54 @@ export function ColorStatistics({ colorCounts }: ColorStatisticsProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="rounded-2xl shadow-lg p-6" style={{backgroundColor: '#fff9f9', boxShadow: '0 4px 15px rgba(255, 214, 231, 0.3)'}}>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">色号统计</h2>
+        <div className="flex items-center gap-2">
+          <span className="text-2xl" style={{color: '#d63384'}}>🎨</span>
+          <h2 className="text-lg font-semibold" style={{color: '#d63384'}}>色号统计</h2>
+        </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors text-sm"
+          className="flex items-center gap-2 px-4 py-2 text-white rounded-2xl transition-all duration-200 text-sm shadow-lg hover:shadow-xl hover:scale-105"
+          style={{
+            background: 'linear-gradient(135deg, #ffd6e7 0%, #e8d5f2 100%)',
+            boxShadow: '0 4px 12px rgba(232, 213, 242, 0.4)'
+          }}
         >
-          <Copy size={16} />
-          {copied ? '已复制' : '复制列表'}
+          <Copy size={16} style={{color: '#000000'}} />
+          <span style={{color: '#000000'}}>{copied ? '已复制' : '复制列表'}</span>
         </button>
       </div>
 
-      <div className="space-y-2 max-h-[600px] overflow-y-auto">
+      <div className="space-y-2 max-h-[600px] overflow-y-auto rounded-2xl p-2" style={{backgroundColor: '#fff9f9'}}>
         {sortedColors.map((color) => (
           <div
             key={color.code}
-            className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded transition-colors"
+            className="flex items-center gap-3 p-3 rounded-2xl transition-all duration-200 hover:shadow-md hover:scale-102"
+            style={{backgroundColor: '#fff9f9'}}
           >
             <div
-              className="w-8 h-8 rounded border border-gray-300 flex-shrink-0"
+              className="w-8 h-8 rounded-2xl border-2 flex-shrink-0"
               style={{
                 backgroundColor: `rgb(${color.rgb[0]}, ${color.rgb[1]}, ${color.rgb[2]})`,
+                borderColor: '#ffd6e7'
               }}
             />
             <div className="flex-1 min-w-0">
-              <div className="font-medium text-sm text-gray-900">{color.code}</div>
-              <div className="text-xs text-gray-500 truncate">{color.name}</div>
+              <div className="font-medium text-sm" style={{color: '#5a4a4a'}}>{color.code}</div>
+              <div className="text-xs" style={{color: '#888888'}}>{color.name}</div>
             </div>
-            <div className="text-sm font-semibold text-blue-600 flex-shrink-0">
+            <div className="text-sm font-semibold flex-shrink-0" style={{color: '#d63384'}}>
               {color.count}个
             </div>
           </div>
         ))}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-gray-200">
-        <div className="text-sm text-gray-600">
-          共使用 <span className="font-semibold text-gray-900">{colorCounts.size}</span> 种颜色，
-          总计 <span className="font-semibold text-gray-900">{sortedColors.reduce((sum, c) => sum + c.count, 0)}</span> 个拼豆
+      <div className="mt-4 pt-4 border-t-2" style={{borderColor: '#ffd6e7'}}>
+        <div className="text-sm" style={{color: '#5a4a4a'}}>
+          共使用 <span className="font-semibold" style={{color: '#d63384'}}>{colorCounts.size}</span> 种颜色，
+          总计 <span className="font-semibold" style={{color: '#d63384'}}>{sortedColors.reduce((sum, c) => sum + c.count, 0)}</span> 个拼豆
         </div>
       </div>
     </div>
