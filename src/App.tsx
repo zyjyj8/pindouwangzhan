@@ -125,8 +125,8 @@ function App() {
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffd6e7' fill-opacity='0.08'%3E%3Cpath d='M30 15c1.5 0 3-1.5 3-3s-1.5-3-3-3-3 1.5-3 3 1.5 3 3 3zm0 0'/%3E%3Ccircle cx='15' cy='45' r='2'/%3E%3Ccircle cx='45' cy='45' r='2'/%3E%3Cpath d='M20 35c0-1.5-1.5-3-3-3s-3 1.5-3 3 1.5 3 3 3 3-1.5 3-3zm0 0'/%3E%3Cpath d='M50 20c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm0 0'/%3E%3Cpath d='M25 25c-.5 0-1 .5-1 1s.5 1 1 1 1-.5 1-1-.5-1-1-1zm0 0'/%3E%3Cpath d='M35 35c-.5 0-1 .5-1 1s.5 1 1 1 1-.5 1-1-.5-1-1-1zm0 0'/%3E%3Cpath d='M10 20c-.5 0-1 .5-1 1s.5 1 1 1 1-.5 1-1-.5-1-1-1zm0 0'/%3E%3Cpath d='M50 50c-.5 0-1 .5-1 1s.5 1 1 1 1-.5 1-1-.5-1-1-1zm0 0'/%3E%3Cpath d='M8 8c-.3 0-.5.2-.5.5s.2.5.5.5.5-.2.5-.5-.2-.5-.5-.5zm0 0'/%3E%3Cpath d='M52 8c-.3 0-.5.2-.5.5s.2.5.5.5.5-.2.5-.5-.2-.5-.5-.5zm0 0'/%3E%3Cpath d='M8 52c-.3 0-.5.2-.5.5s.2.5.5.5.5-.2.5-.5-.2-.5-.5-.5zm0 0'/%3E%3Cpath d='M52 52c-.3 0-.5.2-.5.5s.2.5.5.5.5-.2.5-.5-.2-.5-.5-.5zm0 0'/%3E%3Cpath d='M15 15c-.3 0-.5.2-.5.5s.2.5.5.5.5-.2.5-.5-.2-.5-.5-.5zm0 0'/%3E%3Cpath d='M45 15c-.3 0-.5.2-.5.5s.2.5.5.5.5-.2.5-.5-.2-.5-.5-.5zm0 0'/%3E%3Cpath d='M15 45c-.3 0-.5.2-.5.5s.2.5.5.5.5-.2.5-.5-.2-.5-.5-.5zm0 0'/%3E%3Cpath d='M45 45c-.3 0-.5.2-.5.5s.2.5.5.5.5-.2.5-.5-.2-.5-.5-.5zm0 0'/%3E%3Cpath d='M30 30c-1 0-2 1-2 2s1 2 2 2 2-1 2-2-1-2-2-2zm0 0'/%3E%3Cpath d='M40 40c-.5 0-1 .5-1 1s.5 1 1 1 1-.5 1-1-.5-1-1-1zm0 0'/%3E%3Cpath d='M20 40c-.5 0-1 .5-1 1s.5 1 1 1 1-.5 1-1-.5-1-1-1zm0 0'/%3E%3Cpath d='M40 20c-.5 0-1 .5-1 1s.5 1 1 1 1-.5 1-1-.5-1-1-1zm0 0'/%3E%3Cpath d='M20 20c-.5 0-1 .5-1 1s.5 1 1 1 1-.5 1-1-.5-1-1-1zm0 0'/%3E%3C/g%3E%3C/svg%3E")`,
       }}
     >
-      {/* Left side decorative elements */}
-      <div className="fixed left-4 top-1/4 hidden lg:block" style={{opacity: '0.2'}}>
+      {/* Left side decorative elements - hidden on mobile */}
+      <div className="fixed left-4 top-1/4 hidden xl:block" style={{opacity: '0.2'}}>
         <div className="flex flex-col gap-8">
           <span className="text-4xl" style={{color: '#ffd6e7'}}>🐕</span>
           <span className="text-3xl" style={{color: '#e8d5f2'}}>🎀</span>
@@ -137,8 +137,8 @@ function App() {
         </div>
       </div>
 
-      {/* Right side decorative elements */}
-      <div className="fixed right-4 top-1/3 hidden lg:block" style={{opacity: '0.2'}}>
+      {/* Right side decorative elements - hidden on mobile */}
+      <div className="fixed right-4 top-1/3 hidden xl:block" style={{opacity: '0.2'}}>
         <div className="flex flex-col gap-8">
           <span className="text-3xl" style={{color: '#ffd6e7'}}>🐶</span>
           <span className="text-4xl" style={{color: '#87ceeb'}}>☁️</span>
@@ -159,12 +159,12 @@ function App() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <span className="text-4xl font-bold" style={{color: '#d63384'}}>💕</span>
-            <h1 className="text-4xl font-bold" style={{color: '#d63384', fontFamily: 'cursive'}}>佳佳小霸王专属拼豆工具</h1>
-            <span className="text-4xl font-bold" style={{color: '#d63384'}}>💕</span>
+          <div className="flex items-center justify-center gap-2 mb-2 px-4">
+            <span className="text-2xl sm:text-4xl font-bold" style={{color: '#d63384'}}>💕</span>
+            <h1 className="text-2xl sm:text-4xl font-bold" style={{color: '#d63384', fontFamily: 'cursive'}}>佳佳小霸王专属拼豆工具</h1>
+            <span className="text-2xl sm:text-4xl font-bold" style={{color: '#d63384'}}>💕</span>
           </div>
-          <p className="text-gray-700" style={{color: '#5a4a4a'}}>上传图片，自动转换为拼豆像素画并生成色号统计</p>
+          <p className="text-sm sm:text-base text-gray-700 px-4" style={{color: '#5a4a4a'}}>上传图片，自动转换为拼豆像素画并生成色号统计</p>
         </div>
 
         {/* Top decorative text */}
@@ -188,11 +188,11 @@ function App() {
         {originalImage && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className="lg:col-span-3">
-              <div className="rounded-2xl shadow-lg p-4 relative" style={{backgroundColor: '#fff9f9', boxShadow: '0 4px 15px rgba(255, 214, 231, 0.3)'}}>
+              <div className="rounded-2xl shadow-lg p-4 relative mx-auto max-w-md lg:max-w-none" style={{backgroundColor: '#fff9f9', boxShadow: '0 4px 15px rgba(255, 214, 231, 0.3)'}}>
                 {/* Corner decorations */}
                 <span className="absolute top-2 left-2 text-xl" style={{color: '#ffd6e7', opacity: '0.25'}}>🎀</span>
                 <span className="absolute bottom-2 right-2 text-xl" style={{color: '#ffd6e7', opacity: '0.25'}}>🐕</span>
-                
+
                 <h2 className="text-lg font-semibold mb-4" style={{color: '#d63384'}}>原图</h2>
                 <img
                   src={originalImage}
@@ -208,9 +208,9 @@ function App() {
                 {/* Corner decorations for PixelGrid */}
                 <span className="absolute top-2 left-2 text-xl z-10" style={{color: '#ffd6e7', opacity: '0.25'}}>💕</span>
                 <span className="absolute bottom-2 right-2 text-xl z-10" style={{color: '#ffd6e7', opacity: '0.25'}}>🐶</span>
-                
-                <PixelGrid 
-                  pixels={pixels} 
+
+                <PixelGrid
+                  pixels={pixels}
                   isFlippedHorizontally={isFlippedHorizontally}
                   isFlippedVertically={isFlippedVertically}
                   onHorizontalFlip={() => setIsFlippedHorizontally(!isFlippedHorizontally)}
@@ -224,11 +224,11 @@ function App() {
             </div>
 
             <div className="lg:col-span-3">
-              <div className="rounded-2xl shadow-lg p-4 relative" style={{backgroundColor: '#fff9f9', boxShadow: '0 4px 15px rgba(255, 214, 231, 0.3)'}}>
+              <div className="rounded-2xl shadow-lg p-4 relative mx-auto max-w-md lg:max-w-none" style={{backgroundColor: '#fff9f9', boxShadow: '0 4px 15px rgba(255, 214, 231, 0.3)'}}>
                 {/* Corner decorations */}
                 <span className="absolute top-2 left-2 text-xl" style={{color: '#ffd6e7', opacity: '0.25'}}>🌸</span>
                 <span className="absolute bottom-2 right-2 text-xl" style={{color: '#ffd6e7', opacity: '0.25'}}>🐕</span>
-                
+
                 <ColorStatistics colorCounts={colorCounts} />
               </div>
             </div>

@@ -140,7 +140,7 @@ export function PixelGrid({
   const handleWheel = (e: WheelEvent) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? 0.9 : 1.1;
-    const newZoom = Math.max(0.5, Math.min(zoom * delta, 5));
+    const newZoom = Math.max(0.2, Math.min(zoom * delta, 5));
     setZoom(newZoom);
   };
 
@@ -185,14 +185,14 @@ export function PixelGrid({
   return (
     <>
       <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <h2 className="text-lg font-semibold" style={{color: '#d63384'}}>
             像素化图 ({cols}×{rows})
           </h2>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             <button
               onClick={() => setShowPreview(true)}
-              className="flex items-center gap-2 px-4 py-2 text-white rounded-2xl transition-all duration-200 text-sm shadow-lg hover:shadow-xl hover:scale-105"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 text-white rounded-2xl transition-all duration-200 text-sm shadow-lg hover:shadow-xl hover:scale-105 flex-1 sm:flex-initial justify-center"
               style={{
                 background: 'linear-gradient(135deg, #ffd6e7 0%, #e8d5f2 100%)',
                 boxShadow: '0 4px 12px rgba(232, 213, 242, 0.4)'
@@ -203,7 +203,7 @@ export function PixelGrid({
             </button>
             <button
               onClick={handleDownload}
-              className="flex items-center gap-2 px-4 py-2 text-white rounded-2xl transition-all duration-200 text-sm shadow-lg hover:shadow-xl hover:scale-105"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 text-white rounded-2xl transition-all duration-200 text-sm shadow-lg hover:shadow-xl hover:scale-105 flex-1 sm:flex-initial justify-center"
               style={{
                 background: 'linear-gradient(135deg, #87ceeb 0%, #98fb98 100%)',
                 boxShadow: '0 4px 12px rgba(135, 206, 235, 0.4)'
@@ -215,11 +215,11 @@ export function PixelGrid({
           </div>
         </div>
 
-        <div className="rounded-2xl shadow-lg p-4" style={{backgroundColor: '#fff9f9', boxShadow: '0 4px 15px rgba(255, 214, 231, 0.3)'}}>
-          <div className="flex gap-2 mb-3 pb-3 border-b-2" style={{borderColor: '#ffd6e7'}}>
+        <div className="rounded-2xl shadow-lg p-2 sm:p-4" style={{backgroundColor: '#fff9f9', boxShadow: '0 4px 15px rgba(255, 214, 231, 0.3)'}}>
+          <div className="flex flex-wrap gap-2 mb-3 pb-3 border-b-2" style={{borderColor: '#ffd6e7'}}>
             <button
-              onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}
-              className="flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105"
+              onClick={() => setZoom(Math.max(0.2, zoom - 0.1))}
+              className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-2xl transition-all duration-200 text-xs sm:text-sm shadow hover:shadow-md hover:scale-105"
               style={{
                 background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
                 color: '#5a4a4a'
@@ -228,12 +228,12 @@ export function PixelGrid({
               <ZoomOut size={16} style={{color: '#000000'}} />
               <span style={{color: '#000000'}}>缩小</span>
             </button>
-            <div className="flex items-center gap-2 px-3 py-2 rounded-2xl shadow" style={{backgroundColor: '#fff9f9', color: '#5a4a4a'}}>
-              <span className="font-medium" style={{color: '#000000'}}>{(zoom * 100).toFixed(0)}%</span>
+            <div className="flex items-center gap-2 px-2 sm:px-3 py-2 rounded-2xl shadow" style={{backgroundColor: '#fff9f9', color: '#5a4a4a'}}>
+              <span className="font-medium text-xs sm:text-sm" style={{color: '#000000'}}>{(zoom * 100).toFixed(0)}%</span>
             </div>
             <button
               onClick={() => setZoom(Math.min(zoom + 0.1, 5))}
-              className="flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105"
+              className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-2xl transition-all duration-200 text-xs sm:text-sm shadow hover:shadow-md hover:scale-105"
               style={{
                 background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
                 color: '#5a4a4a'
@@ -242,17 +242,17 @@ export function PixelGrid({
               <ZoomIn size={16} style={{color: '#000000'}} />
               <span style={{color: '#000000'}}>放大</span>
             </button>
-            
+
             {/* Flip buttons */}
             <button
               onClick={onHorizontalFlip}
-              className={`flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105 ${
-                isFlippedHorizontally 
-                  ? 'text-white' 
+              className={`flex items-center gap-1 px-2 sm:px-3 py-2 rounded-2xl transition-all duration-200 text-xs sm:text-sm shadow hover:shadow-md hover:scale-105 ${
+                isFlippedHorizontally
+                  ? 'text-white'
                   : ''
               }`}
               style={{
-                background: isFlippedHorizontally 
+                background: isFlippedHorizontally
                   ? 'linear-gradient(135deg, #d63384 0%, #e8d5f2 100%)'
                   : 'linear-gradient(135deg, #ffd6e7 0%, #ffe0e6 100%)',
                 boxShadow: '0 2px 8px rgba(214, 51, 132, 0.3)'
@@ -263,13 +263,13 @@ export function PixelGrid({
             </button>
             <button
               onClick={onVerticalFlip}
-              className={`flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105 ${
-                isFlippedVertically 
-                  ? 'text-white' 
+              className={`flex items-center gap-1 px-2 sm:px-3 py-2 rounded-2xl transition-all duration-200 text-xs sm:text-sm shadow hover:shadow-md hover:scale-105 ${
+                isFlippedVertically
+                  ? 'text-white'
                   : ''
               }`}
               style={{
-                background: isFlippedVertically 
+                background: isFlippedVertically
                   ? 'linear-gradient(135deg, #d63384 0%, #e8d5f2 100%)'
                   : 'linear-gradient(135deg, #ffd6e7 0%, #ffe0e6 100%)',
                 boxShadow: '0 2px 8px rgba(214, 51, 132, 0.3)'
@@ -278,14 +278,14 @@ export function PixelGrid({
               <FlipVertical size={16} style={{color: '#000000'}} />
               <span style={{color: '#000000'}}>垂直翻转</span>
             </button>
-            
+
             <button
               onClick={() => {
                 setZoom(1);
                 setPan({ x: 0, y: 0 });
                 onReset?.();
               }}
-              className="flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105 ml-auto"
+              className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-2xl transition-all duration-200 text-xs sm:text-sm shadow hover:shadow-md hover:scale-105 w-full sm:w-auto sm:ml-auto justify-center"
               style={{
                 background: 'linear-gradient(135deg, #a8e6cf 0%, #ffd3b6 100%)',
                 color: '#5a4a4a',
@@ -300,8 +300,8 @@ export function PixelGrid({
             ref={containerRef}
             className="rounded-2xl overflow-auto border-2"
             style={{
-              maxWidth: '700px',
-              maxHeight: '800px',
+              maxWidth: '100%',
+              maxHeight: '600px',
               width: '100%',
               padding: '10px',
               backgroundColor: '#fff9f9',

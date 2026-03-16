@@ -13,7 +13,7 @@ export function SizeSelector({ selectedResolution, onResolutionChange }: SizeSel
   return (
     <div className="flex flex-col gap-3">
       <label className="text-sm font-medium" style={{color: '#d63384'}}>选择清晰度：</label>
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         {resolutions.map(({ value, label }) => (
           <label
             key={value}

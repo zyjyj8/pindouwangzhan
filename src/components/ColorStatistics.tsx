@@ -41,15 +41,15 @@ export function ColorStatistics({ colorCounts }: ColorStatisticsProps) {
   }
 
   return (
-    <div className="rounded-2xl shadow-lg p-6" style={{backgroundColor: '#fff9f9', boxShadow: '0 4px 15px rgba(255, 214, 231, 0.3)'}}>
-      <div className="flex items-center justify-between mb-4">
+    <div className="rounded-2xl shadow-lg p-4 sm:p-6" style={{backgroundColor: '#fff9f9', boxShadow: '0 4px 15px rgba(255, 214, 231, 0.3)'}}>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
         <div className="flex items-center gap-2">
           <span className="text-2xl" style={{color: '#d63384'}}>🎨</span>
           <h2 className="text-lg font-semibold" style={{color: '#d63384'}}>色号统计</h2>
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-2 px-4 py-2 text-white rounded-2xl transition-all duration-200 text-sm shadow-lg hover:shadow-xl hover:scale-105"
+          className="flex items-center gap-2 px-3 sm:px-4 py-2 text-white rounded-2xl transition-all duration-200 text-sm shadow-lg hover:shadow-xl hover:scale-105 w-full sm:w-auto justify-center"
           style={{
             background: 'linear-gradient(135deg, #ffd6e7 0%, #e8d5f2 100%)',
             boxShadow: '0 4px 12px rgba(232, 213, 242, 0.4)'

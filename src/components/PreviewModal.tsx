@@ -128,7 +128,7 @@ export function PreviewModal({ pixels, onClose, isFlippedHorizontally = false, i
   const handleWheel = (e: WheelEvent) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? 0.9 : 1.1;
-    const newZoom = Math.max(0.5, Math.min(zoom * delta, 5));
+    const newZoom = Math.max(0.2, Math.min(zoom * delta, 5));
     setZoom(newZoom);
   };
 
@@ -158,48 +158,48 @@ export function PreviewModal({ pixels, onClose, isFlippedHorizontally = false, i
   }, [zoom]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col" style={{backgroundColor: '#fff9f9', boxShadow: '0 8px 25px rgba(255, 214, 231, 0.4)'}}>
-        <div className="flex items-center justify-between p-4 border-b-2" style={{borderColor: '#ffd6e7'}}>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] flex flex-col" style={{backgroundColor: '#fff9f9', boxShadow: '0 8px 25px rgba(255, 214, 231, 0.4)'}}>
+        <div className="flex items-center justify-between p-3 sm:p-4 border-b-2" style={{borderColor: '#ffd6e7'}}>
           <div className="flex items-center gap-2">
-            <span className="text-2xl" style={{color: '#d63384'}}>💕</span>
-            <h2 className="text-xl font-semibold" style={{color: '#d63384', fontFamily: 'cursive'}}>全图预览</h2>
-            <span className="text-2xl" style={{color: '#d63384'}}>💕</span>
+            <span className="text-xl sm:text-2xl" style={{color: '#d63384'}}>💕</span>
+            <h2 className="text-lg sm:text-xl font-semibold" style={{color: '#d63384', fontFamily: 'cursive'}}>全图预览</h2>
+            <span className="text-xl sm:text-2xl" style={{color: '#d63384'}}>💕</span>
           </div>
           <button
             onClick={onClose}
             className="p-2 rounded-2xl transition-all duration-200 hover:shadow-md hover:scale-110"
             style={{backgroundColor: '#ffe0e6'}}
           >
-            <X size={24} className="text-gray-600" />
+            <X size={20} className="text-gray-600 sm:w-6 sm:h-6" />
           </button>
         </div>
 
         <div className="flex-1 overflow-hidden flex flex-col">
-          <div className="flex gap-2 p-4" style={{backgroundColor: '#fff9f9'}}>
+          <div className="flex flex-wrap gap-2 p-2 sm:p-4" style={{backgroundColor: '#fff9f9'}}>
             <button
-              onClick={() => setZoom(Math.max(0.5, zoom - 0.2))}
-              className="flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 shadow hover:shadow-md hover:scale-105"
+              onClick={() => setZoom(Math.max(0.2, zoom - 0.2))}
+              className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-2xl transition-all duration-200 shadow hover:shadow-md hover:scale-105 text-xs sm:text-sm"
               style={{
                 background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
                 color: '#5a4a4a'
               }}
             >
-              <ZoomOut size={18} style={{color: '#000000'}} />
+              <ZoomOut size={16} className="sm:w-[18px] sm:h-[18px]" style={{color: '#000000'}} />
               <span style={{color: '#000000'}}>缩小</span>
             </button>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-2xl shadow" style={{backgroundColor: '#fff9f9', color: '#5a4a4a'}}>
-              <span className="text-sm font-medium" style={{color: '#000000'}}>{(zoom * 100).toFixed(0)}%</span>
+            <div className="flex items-center gap-2 px-2 sm:px-4 py-2 rounded-2xl shadow" style={{backgroundColor: '#fff9f9', color: '#5a4a4a'}}>
+              <span className="text-xs sm:text-sm font-medium" style={{color: '#000000'}}>{(zoom * 100).toFixed(0)}%</span>
             </div>
             <button
               onClick={() => setZoom(Math.min(zoom + 0.2, 5))}
-              className="flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 shadow hover:shadow-md hover:scale-105"
+              className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-2xl transition-all duration-200 shadow hover:shadow-md hover:scale-105 text-xs sm:text-sm"
               style={{
                 background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
                 color: '#5a4a4a'
               }}
             >
-              <ZoomIn size={18} style={{color: '#000000'}} />
+              <ZoomIn size={16} className="sm:w-[18px] sm:h-[18px]" style={{color: '#000000'}} />
               <span style={{color: '#000000'}}>放大</span>
             </button>
             <button
@@ -207,7 +207,7 @@ export function PreviewModal({ pixels, onClose, isFlippedHorizontally = false, i
                 setZoom(1);
                 setPan({ x: 0, y: 0 });
               }}
-              className="flex items-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 text-sm shadow hover:shadow-md hover:scale-105 ml-auto"
+              className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-2xl transition-all duration-200 text-xs sm:text-sm shadow hover:shadow-md hover:scale-105 w-full sm:w-auto sm:ml-auto justify-center"
               style={{
                 background: 'linear-gradient(135deg, #a8e6cf 0%, #ffd3b6 100%)',
                 color: '#5a4a4a',
